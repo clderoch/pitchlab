@@ -616,8 +616,8 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
       {/* Header */}
       <div style={{ background: "#ffffff", borderBottom: "1px solid #0e1628", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <div style={{ fontSize: 22, letterSpacing: 3, color: "#fff" }}>
-            <span style={{ color: "#0284c7" }}>⚾</span> PITCH<span style={{ color: "#0284c7" }}>LAB</span>
+          <div style={{ fontSize: 22, letterSpacing: 3, color: "#0284c7" }}>
+            <span>⚾</span> PITCH<span>LAB</span>
           </div>
           <div style={{ fontSize: 10, color: "#475569", fontFamily: "monospace", letterSpacing: 2, marginTop: 1 }}>
             PITCHER ANALYSIS SYSTEM
