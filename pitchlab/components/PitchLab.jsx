@@ -10,7 +10,7 @@ const RESULT_COLORS = {
   "swinging-strike": "#16a34a",
   "ball": "#dc2626",
   "foul": "#d97706",
-  "in-play": "#ca8a04",
+  "in-play": "#f59e0b",
 };
 
 const RESULT_LABELS = {
@@ -72,23 +72,23 @@ function StrikeZone({ pitches }) {
 
       {/* Home plate silhouette */}
       <polygon points={`${total/2-18},${total-8} ${total/2+18},${total-8} ${total/2+18},${total-18} ${total/2},${total-4} ${total/2-18},${total-18}`}
-        fill="#e2e8f0" stroke="#444" strokeWidth="1" />
+        fill="#1e2a3a" stroke="#475569" strokeWidth="1" />
 
       {/* Outside zone border */}
       <rect x={padding - 20} y={padding - 20} width={zoneSize + 40} height={zoneSize + 40}
-        fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" rx="2" />
+        fill="none" stroke="#1e2a3a" strokeWidth="1" strokeDasharray="4 4" rx="2" />
 
       {/* Strike zone background */}
       <rect x={padding} y={padding} width={zoneSize} height={zoneSize}
-        fill="#eef2f7" stroke="#93c5fd" strokeWidth="1.5" rx="2" />
+        fill="#0d1424" stroke="#00e5ff" strokeWidth="1.5" rx="2" />
 
       {/* Zone grid lines */}
       {[1, 2].map(i => (
         <g key={i}>
           <line x1={padding + (zoneSize / 3) * i} y1={padding} x2={padding + (zoneSize / 3) * i} y2={padding + zoneSize}
-            stroke="#e2e8f0" strokeWidth="1" />
+            stroke="#1e2a3a" strokeWidth="1" />
           <line x1={padding} y1={padding + (zoneSize / 3) * i} x2={padding + zoneSize} y2={padding + (zoneSize / 3) * i}
-            stroke="#e2e8f0" strokeWidth="1" />
+            stroke="#1e2a3a" strokeWidth="1" />
         </g>
       ))}
 
@@ -97,7 +97,7 @@ function StrikeZone({ pitches }) {
         <text key={zone}
           x={padding + (px / 100) * zoneSize}
           y={padding + (py / 100) * zoneSize + 3}
-          textAnchor="middle" fontSize="9" fill="#64748b" fontFamily="monospace">
+          textAnchor="middle" fontSize="9" fill="#475569" fontFamily="monospace">
           {zone}
         </text>
       ))}
@@ -131,10 +131,10 @@ function StrikeZone({ pitches }) {
 
       {/* Strike zone border glow */}
       <rect x={padding} y={padding} width={zoneSize} height={zoneSize}
-        fill="none" stroke="#93c5fd" strokeWidth="1.5" rx="2" filter="url(#glow)" />
+        fill="none" stroke="#00e5ff" strokeWidth="1.5" rx="2" filter="url(#glow)" />
 
       {/* Labels */}
-      <text x={total / 2} y={padding - 28} textAnchor="middle" fontSize="9" fill="#475569" fontFamily="monospace" letterSpacing="2">CATCHER'S VIEW</text>
+      <text x={total / 2} y={padding - 28} textAnchor="middle" fontSize="9" fill="#64748b" fontFamily="monospace" letterSpacing="2">CATCHER'S VIEW</text>
       <text x={padding - 22} y={padding + zoneSize / 2 + 3} textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="monospace">IN</text>
       <text x={padding + zoneSize + 22} y={padding + zoneSize / 2 + 3} textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="monospace">OUT</text>
     </svg>
@@ -143,10 +143,10 @@ function StrikeZone({ pitches }) {
 
 function StatBox({ label, value, sub, accent }) {
   return (
-    <div style={{ flex: 1, background: "#f8fafc", border: "1px solid #1a1f2e", borderRadius: 8, padding: "10px 8px", textAlign: "center", minWidth: 60 }}>
-      <div style={{ fontSize: 9, color: "#3a4a6a", letterSpacing: 2, fontFamily: "monospace", marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 26, color: accent || "#1e293b", lineHeight: 1, fontFamily: "'Barlow Condensed', 'Impact', sans-serif", letterSpacing: 1 }}>{value}</div>
-      {sub && <div style={{ fontSize: 9, color: "#3a4a6a", marginTop: 2, fontFamily: "monospace" }}>{sub}</div>}
+    <div style={{ flex: 1, background: "#111827", border: "1px solid #1e2a3a", borderRadius: 8, padding: "10px 8px", textAlign: "center", minWidth: 60 }}>
+      <div style={{ fontSize: 9, color: "#64748b", letterSpacing: 2, fontFamily: "monospace", marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 26, color: accent || "#e2e8f0", lineHeight: 1, fontFamily: "'Barlow Condensed', 'Impact', sans-serif", letterSpacing: 1 }}>{value}</div>
+      {sub && <div style={{ fontSize: 9, color: "#64748b", marginTop: 2, fontFamily: "monospace" }}>{sub}</div>}
     </div>
   );
 }
@@ -425,11 +425,11 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
     c.strokeStyle = "#e2e8f0"; c.lineWidth = 1; c.beginPath(); c.moveTo(0,90); c.lineTo(W,90); c.stroke();
 
     // Cyan accent bar
-    c.fillStyle = "#0284c7"; c.fillRect(0, 0, 4, 90);
+    c.fillStyle = "#00e5ff"; c.fillRect(0, 0, 4, 90);
 
     // Title
-    c.fillStyle = "#0284c7"; c.font = "bold 32px monospace"; c.fillText("PITCH", 24, 42);
-    c.fillStyle = "#1e293b"; c.fillText("LAB", 105, 42);
+    c.fillStyle = "#00e5ff"; c.font = "bold 32px monospace"; c.fillText("PITCH", 24, 42);
+    c.fillStyle = "#00e5ff"; c.fillText("LAB", 105, 42);
     c.fillStyle = "#475569"; c.font = "11px monospace"; c.fillText("PITCHER ANALYSIS REPORT", 24, 62);
 
     // Pitcher name + date
@@ -599,46 +599,47 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
   const resultLabel = (r) => ({ "called-strike": "Called K", "swinging-strike": "Swing K", "ball": "Ball", "foul": "Foul", "in-play": "In Play" }[r] || r);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f5f7fa", color: "#1e293b", fontFamily: "'Barlow Condensed', 'Impact', sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#0a0f1e", color: "#e2e8f0", fontFamily: "'Barlow Condensed', 'Impact', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: #1e2a3a; }
         .tab { cursor: pointer; padding: 8px 16px; font-size: 12px; letter-spacing: 2px; border: none; background: transparent; font-family: 'DM Mono', monospace; transition: all 0.15s; }
         .tab.active { color: #00e5ff; border-bottom: 2px solid #00e5ff; }
-        .tab:not(.active) { color: #2a3a5a; border-bottom: 2px solid transparent; }
-        .tab:hover:not(.active) { color: #4a6a8a; }
+        .tab:not(.active) { color: #64748b; border-bottom: 2px solid transparent; }
+        .tab:hover:not(.active) { color: #94a3b8; }
         .pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-family: 'DM Mono', monospace; }
         @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .pop { animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
       `}</style>
 
       {/* Header */}
-      <div style={{ background: "#ffffff", borderBottom: "1px solid #0e1628", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ background: "#0d1424", borderBottom: "1px solid #1e2a3a", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <div style={{ fontSize: 22, letterSpacing: 3, color: "#0284c7" }}>
+          <div style={{ fontSize: 30, letterSpacing: 4, color: "#00e5ff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, lineHeight: 1 }}>
             <span>⚾</span> PITCH<span>LAB</span>
           </div>
-          <div style={{ fontSize: 10, color: "#475569", fontFamily: "monospace", letterSpacing: 2, marginTop: 1 }}>
+          <div style={{ height: 2, background: "linear-gradient(90deg, #00e5ff55, transparent)", marginTop: 4, marginBottom: 3, width: 160 }} />
+          <div style={{ fontSize: 10, color: "#64748b", fontFamily: "monospace", letterSpacing: 2 }}>
             PITCHER ANALYSIS SYSTEM
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
           <input value={pitcherName} onChange={e => setPitcherName(e.target.value)}
-            style={{ background: "transparent", border: "none", color: "#1e293b", fontSize: 18, letterSpacing: 2, textAlign: "right", width: 120, fontFamily: "'Barlow Condensed', sans-serif" }} />
-          <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 1 }}>TAP TO EDIT NAME</div>
+            style={{ background: "transparent", border: "none", color: "#e2e8f0", fontSize: 18, letterSpacing: 2, textAlign: "right", width: 120, fontFamily: "'Barlow Condensed', sans-serif" }} />
+          <div style={{ fontSize: 9, color: "#475569", fontFamily: "monospace", letterSpacing: 1 }}>TAP TO EDIT NAME</div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ background: "#ffffff", borderBottom: "1px solid #0e1628", display: "flex" }}>
+      <div style={{ background: "#0d1424", borderBottom: "1px solid #1e2a3a", display: "flex" }}>
         {["zone", "log", "history", "setup"].map(t => (
           <button key={t} className={`tab${tab === t ? " active" : ""}`} onClick={() => setTab(t)}>
             {t === "zone" ? "ZONE MAP" : t === "log" ? "PITCH LOG" : t === "history" ? `HISTORY${history.length > 0 ? ` (${history.length})` : ""}` : "SETUP"}
           </button>
         ))}
         <div style={{ marginLeft: "auto", padding: "8px 12px", fontSize: 10, color: "#64748b", fontFamily: "monospace", display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ color: "#166534" }}>${totalCost.toFixed(4)}</span>
+          <span style={{ color: "#22c55e" }}>${totalCost.toFixed(4)}</span>
           <span>{total} pitches</span>
         </div>
       </div>
@@ -646,23 +647,23 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
         {/* Camera strip */}
-        <div style={{ position: "relative", background: "#f0f4f8", height: 200, overflow: "hidden" }}>
+        <div style={{ position: "relative", background: "#080d18", height: 200, overflow: "hidden" }}>
           <video ref={videoRef} autoPlay playsInline muted style={{ width: "100%", height: "100%", objectFit: "cover", opacity: cameraActive ? 1 : 0.3 }} />
           <canvas ref={canvasRef} style={{ display: "none" }} />
           <canvas ref={motionCanvasRef} style={{ display: "none" }} />
 
           {!cameraActive && (
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: 11, color: "#64748b", fontFamily: "monospace", letterSpacing: 3 }}>NO FEED — START CAMERA</span>
+              <span style={{ fontSize: 11, color: "#475569", fontFamily: "monospace", letterSpacing: 3 }}>NO FEED — START CAMERA</span>
             </div>
           )}
 
           {/* Status badge */}
           {analyzing && (
             <div style={{ position: "absolute", top: 10, left: 10, display: "flex", alignItems: "center", gap: 6 }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: watchState === "active" ? "#16a34a" : "#64748b",
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: watchState === "active" ? "#16a34a" : "#475569",
                 boxShadow: watchState === "active" ? "0 0 8px #00ff88" : "none", transition: "all 0.3s" }} />
-              <span style={{ fontSize: 10, fontFamily: "monospace", color: watchState === "active" ? "#16a34a" : "#334155", letterSpacing: 2 }}>
+              <span style={{ fontSize: 10, fontFamily: "monospace", color: watchState === "active" ? "#16a34a" : "#94a3b8", letterSpacing: 2 }}>
                 {watchState === "active" ? "PITCH DETECTED" : "WATCHING"}
               </span>
             </div>
@@ -670,7 +671,7 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
 
           {isLoading && (
             <div style={{ position: "absolute", top: 10, right: 10 }}>
-              <span style={{ fontSize: 10, fontFamily: "monospace", color: "#0284c7", letterSpacing: 2 }}>ANALYZING...</span>
+              <span style={{ fontSize: 10, fontFamily: "monospace", color: "#00e5ff", letterSpacing: 2 }}>ANALYZING...</span>
             </div>
           )}
 
@@ -685,63 +686,63 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
               <span style={{ fontSize: 16, color: resultColor(lastPitch.result), letterSpacing: 2 }}>
                 {resultLabel(lastPitch.result).toUpperCase()}
               </span>
-              {lastPitch.zone && <span style={{ fontSize: 11, color: "#888", marginLeft: 8, fontFamily: "monospace" }}>
+              {lastPitch.zone && <span style={{ fontSize: 11, color: "#64748b", marginLeft: 8, fontFamily: "monospace" }}>
                 ZONE {lastPitch.zone}
               </span>}
             </div>
           )}
 
           {/* Motion bar */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 2, background: "#e2e8f0" }}>
-            <div style={{ height: "100%", width: `${Math.min(motionLevel * 3, 100)}%`, background: motionLevel >= 10 ? "#0284c7" : "#94a3b8", transition: "width 0.3s" }} />
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: "#1e2a3a" }}>
+            <div style={{ height: "100%", width: `${Math.min(motionLevel * 3, 100)}%`, background: motionLevel >= 10 ? "#00e5ff" : "#334155", transition: "width 0.3s" }} />
           </div>
         </div>
 
         {/* Camera controls */}
-        <div style={{ background: "#ffffff", padding: "10px 16px", display: "flex", gap: 8, borderBottom: "1px solid #0e1628" }}>
+        <div style={{ background: "#0d1424", padding: "10px 16px", display: "flex", gap: 8, borderBottom: "1px solid #1e2a3a" }}>
           <button onClick={cameraActive ? stopCamera : startCamera}
-            style={{ flex: 1, padding: "9px", background: cameraActive ? "#fee2e2" : "#f8fafc", color: cameraActive ? "#dc2626" : "#64748b",
-              border: `1px solid ${cameraActive ? "#dc262644" : "#e2e8f0"}`, borderRadius: 6, cursor: "pointer", fontSize: 12, letterSpacing: 2, fontFamily: "monospace" }}>
+            style={{ flex: 1, padding: "9px", background: cameraActive ? "#1a0808" : "#111827", color: cameraActive ? "#dc2626" : "#64748b",
+              border: `1px solid ${cameraActive ? "#dc262644" : "#1e2a3a"}`, borderRadius: 6, cursor: "pointer", fontSize: 12, letterSpacing: 2, fontFamily: "monospace" }}>
             {cameraActive ? "■ STOP" : "● CAMERA"}
           </button>
           <button onClick={toggleAnalysis} disabled={!cameraActive}
-            style={{ flex: 2, padding: "9px", background: analyzing ? "#f0fdf4" : "#f8fafc", color: analyzing ? "#16a34a" : cameraActive ? "#1e293b" : "#e2e8f0",
-              border: `1px solid ${analyzing ? "#16a34a44" : cameraActive ? "#64748b" : "#e2e8f0"}`, borderRadius: 6, cursor: cameraActive ? "pointer" : "not-allowed",
+            style={{ flex: 2, padding: "9px", background: analyzing ? "#041a0d" : "#111827", color: analyzing ? "#16a34a" : cameraActive ? "#e2e8f0" : "#334155",
+              border: `1px solid ${analyzing ? "#16a34a44" : cameraActive ? "#1e2a3a" : "#1e2a3a"}`, borderRadius: 6, cursor: cameraActive ? "pointer" : "not-allowed",
               fontSize: 12, letterSpacing: 2, fontFamily: "monospace" }}>
             {analyzing ? "⏸ PAUSE ANALYSIS" : "▶ START ANALYSIS"}
           </button>
         </div>
 
         {/* Velocity Input */}
-        <div style={{ background: "#ffffff", padding: "10px 16px", borderBottom: "1px solid #0e1628", display: "flex", gap: 10, alignItems: "center" }}>
+        <div style={{ background: "#0d1424", padding: "10px 16px", borderBottom: "1px solid #1e2a3a", display: "flex", gap: 10, alignItems: "center" }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 2, marginBottom: 5 }}>RADAR GUN MPH → LAST PITCH</div>
             <div style={{ display: "flex", gap: 6 }}>
               <input type="number" min="20" max="100" placeholder="e.g. 58"
                 value={veloInput} onChange={e => setVeloInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && stampVelo(veloInput)}
-                style={{ flex: 1, background: "#eef2f7", border: "1px solid #1e3a5f", borderRadius: 6, color: "#1e293b",
+                style={{ flex: 1, background: "#0a0f1e", border: "1px solid #1e2a3a", borderRadius: 6, color: "#e2e8f0",
                   fontSize: 22, padding: "7px 12px", fontFamily: "monospace", outline: "none", WebkitAppearance: "none" }} />
               <button onClick={() => stampVelo(veloInput)} style={{
                 padding: "7px 16px", borderRadius: 6, cursor: "pointer", fontSize: 12, fontFamily: "monospace", letterSpacing: 1, transition: "all 0.2s",
-                background: veloFlash ? "#16a34a22" : "#eff6ff",
-                color: veloFlash ? "#16a34a" : "#0284c7",
-                border: `1px solid ${veloFlash ? "#16a34a44" : "#0284c733"}`,
+                background: veloFlash ? "#041a0d" : "#001929",
+                color: veloFlash ? "#16a34a" : "#00e5ff",
+                border: `1px solid ${veloFlash ? "#16a34a44" : "#00e5ff33"}`,
               }}>{veloFlash ? "✓ SET" : "SET →"}</button>
             </div>
           </div>
-          <div style={{ textAlign: "center", minWidth: 64, paddingLeft: 8, borderLeft: "1px solid #0e1628" }}>
+          <div style={{ textAlign: "center", minWidth: 64, paddingLeft: 8, borderLeft: "1px solid #1e2a3a" }}>
             <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 1, marginBottom: 2 }}>TOP</div>
-            <div style={{ fontSize: 30, color: maxVelo ? "#ca8a04" : "#94a3b8", fontFamily: "monospace", lineHeight: 1 }}>{maxVelo ?? "—"}</div>
-            <div style={{ fontSize: 9, color: avgVelo ? "#15803d" : "#cbd5e1", fontFamily: "monospace", marginTop: 2 }}>AVG {avgVelo ?? "—"}</div>
+            <div style={{ fontSize: 30, color: maxVelo ? "#fbbf24" : "#475569", fontFamily: "monospace", lineHeight: 1 }}>{maxVelo ?? "—"}</div>
+            <div style={{ fontSize: 9, color: avgVelo ? "#22c55e" : "#475569", fontFamily: "monospace", marginTop: 2 }}>AVG {avgVelo ?? "—"}</div>
           </div>
         </div>
 
         {/* Stats row */}
-        <div style={{ display: "flex", gap: 6, padding: "10px 16px", background: "#f5f7fa", borderBottom: "1px solid #0e1628" }}>
+        <div style={{ display: "flex", gap: 6, padding: "10px 16px", background: "#0a0f1e", borderBottom: "1px solid #1e2a3a" }}>
           <StatBox label="PITCHES" value={total} />
-          <StatBox label="STR %" value={`${strikesPct}%`} accent={strikesPct >= 60 ? "#16a34a" : strikesPct >= 50 ? "#ca8a04" : "#dc2626"} />
-          <StatBox label="ZONE %" value={`${zonePct}%`} accent="#0284c7" />
+          <StatBox label="STR %" value={`${strikesPct}%`} accent={strikesPct >= 60 ? "#16a34a" : strikesPct >= 50 ? "#f59e0b" : "#dc2626"} />
+          <StatBox label="ZONE %" value={`${zonePct}%`} accent="#00e5ff" />
           <StatBox label="BALLS" value={balls} accent="#dc2626" />
           <StatBox label="FOULS" value={fouls} accent="#d97706" />
         </div>
@@ -756,9 +757,9 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
                 {PITCH_TYPES.map(t => (
                   <button key={t} onClick={() => setSelectedType(t)} style={{
                     padding: "5px 12px", borderRadius: 20, fontSize: 11, cursor: "pointer", letterSpacing: 1, fontFamily: "monospace",
-                    background: selectedType === t ? "#eff6ff" : "transparent",
-                    color: selectedType === t ? "#0284c7" : "#334155",
-                    border: `1px solid ${selectedType === t ? "#0284c744" : "#e2e8f0"}`,
+                    background: selectedType === t ? "#001929" : "transparent",
+                    color: selectedType === t ? "#00e5ff" : "#64748b",
+                    border: `1px solid ${selectedType === t ? "#00e5ff44" : "#1e2a3a"}`,
                   }}>{t}</button>
                 ))}
               </div>
@@ -779,15 +780,15 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
 
             {/* Pitch type breakdown */}
             {total > 0 && (
-              <div style={{ marginTop: 16, background: "#ffffff", borderRadius: 8, padding: "12px 14px", border: "1px solid #0e1628" }}>
+              <div style={{ marginTop: 16, background: "#111827", borderRadius: 8, padding: "12px 14px", border: "1px solid #1e2a3a" }}>
                 <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 2, marginBottom: 10 }}>PITCH MIX</div>
                 {PITCH_TYPES.filter(t => byType[t] > 0).map(t => (
                   <div key={t} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                    <span style={{ fontSize: 11, color: "#64748b", fontFamily: "monospace", width: 80 }}>{t}</span>
-                    <div style={{ flex: 1, height: 4, background: "#eef2f7", borderRadius: 2, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${(byType[t] / total) * 100}%`, background: "#0284c744", borderRadius: 2 }} />
+                    <span style={{ fontSize: 11, color: "#94a3b8", fontFamily: "monospace", width: 80 }}>{t}</span>
+                    <div style={{ flex: 1, height: 4, background: "#1e2a3a", borderRadius: 2, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${(byType[t] / total) * 100}%`, background: "#00e5ff44", borderRadius: 2 }} />
                     </div>
-                    <span style={{ fontSize: 11, color: "#1e293b", fontFamily: "monospace", width: 20, textAlign: "right" }}>{byType[t]}</span>
+                    <span style={{ fontSize: 11, color: "#e2e8f0", fontFamily: "monospace", width: 20, textAlign: "right" }}>{byType[t]}</span>
                   </div>
                 ))}
               </div>
@@ -812,23 +813,23 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
                   setHistory(loadHistory());
                   setPitches([]); setLastPitch(null); setTotalCost(0);
                 }
-              }} style={{ flex: 1, padding: "8px", background: "transparent", color: "#64748b", border: "1px solid #0e1628", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
+              }} style={{ flex: 1, padding: "8px", background: "transparent", color: "#64748b", border: "1px solid #1e2a3a", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
                 SAVE + CLEAR
               </button>
               <button onClick={loadDemo}
-                style={{ flex: 1, padding: "8px", background: "#f8fafc", color: "#ca8a04", border: "1px solid #f5c51822", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
+                style={{ flex: 1, padding: "8px", background: "#111827", color: "#f59e0b", border: "1px solid #f59e0b22", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
                 DEMO
               </button>
               <button onClick={() => addPitch({ result: "called-strike", zone: 5, type: selectedType, mechanic: null, confidence: "manual", time: new Date().toLocaleTimeString() })}
-                style={{ flex: 1, padding: "8px", background: "#f0fdf4", color: "#16a34a", border: "1px solid #00ff8822", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
+                style={{ flex: 1, padding: "8px", background: "#041a0d", color: "#16a34a", border: "1px solid #00ff8822", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
                 + PITCH
               </button>
             </div>
             <button onClick={exportReport} disabled={exporting || pitches.length === 0}
               style={{ width: "100%", marginTop: 8, padding: "11px", borderRadius: 6, cursor: pitches.length === 0 ? "not-allowed" : "pointer",
-                background: pitches.length > 0 ? "#eff6ff" : "#f8fafc",
-                color: pitches.length > 0 ? "#0284c7" : "#94a3b8",
-                border: `1px solid ${pitches.length > 0 ? "#0284c744" : "#e2e8f0"}`,
+                background: pitches.length > 0 ? "#001929" : "#111827",
+                color: pitches.length > 0 ? "#00e5ff" : "#334155",
+                border: `1px solid ${pitches.length > 0 ? "#00e5ff44" : "#1e2a3a"}`,
                 fontSize: 12, fontFamily: "monospace", letterSpacing: 2,
               }}>
               {exporting ? "GENERATING..." : "↓ EXPORT REPORT (PNG)"}
@@ -844,22 +845,22 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 {[...pitches].reverse().map((p, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px",
-                    background: "#ffffff", borderRadius: 6, border: `1px solid ${resultColor(p.result)}18` }}>
+                    background: "#111827", borderRadius: 6, border: `1px solid ${resultColor(p.result)}18` }}>
                     <div style={{ width: 32, height: 32, borderRadius: "50%", background: resultColor(p.result) + "22",
                       border: `1.5px solid ${resultColor(p.result)}`, display: "flex", alignItems: "center", justifyContent: "center",
                       fontSize: 10, color: resultColor(p.result), fontFamily: "monospace", flexShrink: 0 }}>
                       {RESULT_LABELS[p.result]}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, color: "#1e293b", letterSpacing: 1 }}>
+                      <div style={{ fontSize: 13, color: "#e2e8f0", letterSpacing: 1 }}>
                         {resultLabel(p.result)} · <span style={{ color: "#64748b" }}>Zone {p.zone || "—"}</span>
-                        {p.velo ? <span style={{ color: "#ca8a04", marginLeft: 8, fontFamily: "monospace" }}>{p.velo} mph</span> : null}
+                        {p.velo ? <span style={{ color: "#fbbf24", marginLeft: 8, fontFamily: "monospace" }}>{p.velo} mph</span> : null}
                       </div>
-                      <div style={{ fontSize: 10, color: "#475569", fontFamily: "monospace" }}>
+                      <div style={{ fontSize: 10, color: "#64748b", fontFamily: "monospace" }}>
                         {p.type}{p.mechanic ? ` · ${p.mechanic}` : ""}
                       </div>
                     </div>
-                    <div style={{ fontSize: 9, color: "#94a3b8", fontFamily: "monospace" }}>{p.time}</div>
+                    <div style={{ fontSize: 9, color: "#475569", fontFamily: "monospace" }}>{p.time}</div>
                   </div>
                 ))}
               </div>
@@ -873,7 +874,7 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
               <div style={{ textAlign: "center", color: "#64748b", fontFamily: "monospace", fontSize: 11, padding: "40px 0" }}>
                 <div style={{ fontSize: 28, marginBottom: 12 }}>📋</div>
                 NO SESSIONS SAVED YET<br />
-                <span style={{ color: "#e2e8f0", fontSize: 10, marginTop: 8, display: "block" }}>
+                <span style={{ color: "#334155", fontSize: 10, marginTop: 8, display: "block" }}>
                   Sessions are saved when you tap SAVE + CLEAR
                 </span>
               </div>
@@ -882,27 +883,27 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
                 {history.map((s, i) => {
                   const sp = s.strikesPct || 0;
                   return (
-                    <div key={s.id} style={{ background: "#ffffff", borderRadius: 8, padding: "12px 14px", border: "1px solid #0e1628" }}>
+                    <div key={s.id} style={{ background: "#111827", borderRadius: 8, padding: "12px 14px", border: "1px solid #1e2a3a" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
                         <div>
-                          <div style={{ fontSize: 14, color: "#1e293b", letterSpacing: 1 }}>{s.pitcher}</div>
-                          <div style={{ fontSize: 10, color: "#334155", fontFamily: "monospace", marginTop: 2 }}>{s.date} · {s.time}</div>
+                          <div style={{ fontSize: 14, color: "#e2e8f0", letterSpacing: 1 }}>{s.pitcher}</div>
+                          <div style={{ fontSize: 10, color: "#64748b", fontFamily: "monospace", marginTop: 2 }}>{s.date} · {s.time}</div>
                         </div>
                         <div style={{ textAlign: "right" }}>
-                          <div style={{ fontSize: 22, color: sp >= 60 ? "#16a34a" : sp >= 50 ? "#ca8a04" : "#dc2626", fontFamily: "monospace" }}>{sp}%</div>
+                          <div style={{ fontSize: 22, color: sp >= 60 ? "#16a34a" : sp >= 50 ? "#f59e0b" : "#dc2626", fontFamily: "monospace" }}>{sp}%</div>
                           <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace" }}>STRIKES</div>
                         </div>
                       </div>
                       <div style={{ display: "flex", gap: 6 }}>
                         {[
                           { label: "PITCHES", value: s.total },
-                          { label: "ZONE %", value: `${s.zonePct || 0}%`, color: "#0284c7" },
-                          { label: "TOP MPH", value: s.maxVelo || "—", color: "#ca8a04" },
+                          { label: "ZONE %", value: `${s.zonePct || 0}%`, color: "#00e5ff" },
+                          { label: "TOP MPH", value: s.maxVelo || "—", color: "#fbbf24" },
                           { label: "AVG MPH", value: s.avgVelo || "—" },
                         ].map(({ label, value, color }) => (
-                          <div key={label} style={{ flex: 1, background: "#f8fafc", borderRadius: 6, padding: "6px 4px", textAlign: "center" }}>
+                          <div key={label} style={{ flex: 1, background: "#0d1424", borderRadius: 6, padding: "6px 4px", textAlign: "center" }}>
                             <div style={{ fontSize: 8, color: "#64748b", fontFamily: "monospace", letterSpacing: 1 }}>{label}</div>
-                            <div style={{ fontSize: 16, color: color || "#1e293b", fontFamily: "monospace" }}>{value}</div>
+                            <div style={{ fontSize: 16, color: color || "#e2e8f0", fontFamily: "monospace" }}>{value}</div>
                           </div>
                         ))}
                       </div>
@@ -910,7 +911,7 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
                   );
                 })}
                 <button onClick={() => { if (confirm("Delete all session history?")) { localStorage.removeItem(HISTORY_KEY); setHistory([]); } }}
-                  style={{ padding: "8px", background: "transparent", color: "#cbd5e1", border: "1px solid #0e1628", borderRadius: 6, cursor: "pointer", fontSize: 10, fontFamily: "monospace", letterSpacing: 1, marginTop: 4 }}>
+                  style={{ padding: "8px", background: "transparent", color: "#475569", border: "1px solid #1e2a3a", borderRadius: 6, cursor: "pointer", fontSize: 10, fontFamily: "monospace", letterSpacing: 1, marginTop: 4 }}>
                   CLEAR ALL HISTORY
                 </button>
               </div>
@@ -920,7 +921,7 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
 
         {tab === "setup" && (
           <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ background: "#ffffff", borderRadius: 10, padding: "14px", border: "1px solid #0e1628" }}>
+            <div style={{ background: "#111827", borderRadius: 10, padding: "14px", border: "1px solid #1e2a3a" }}>
               <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 2, marginBottom: 10 }}>CAMERA ANGLE</div>
               {[
                 { id: "behind", label: "Behind Home Plate", desc: "Best for pitch location & zone tracking. Set up a tripod behind the catcher, slightly elevated. This is the recommended setup." },
@@ -928,19 +929,19 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
               ].map(opt => (
                 <div key={opt.id} onClick={() => setCameraAngle(opt.id)} style={{
                   padding: "10px 12px", borderRadius: 8, marginBottom: 8, cursor: "pointer",
-                  background: cameraAngle === opt.id ? "#eff6ff" : "#f8fafc",
-                  border: `1px solid ${cameraAngle === opt.id ? "#0284c744" : "#e2e8f0"}`,
+                  background: cameraAngle === opt.id ? "#001929" : "#0d1424",
+                  border: `1px solid ${cameraAngle === opt.id ? "#00e5ff44" : "#1e2a3a"}`,
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: cameraAngle === opt.id ? "#0284c7" : "#94a3b8", transition: "all 0.2s" }} />
-                    <span style={{ fontSize: 13, color: cameraAngle === opt.id ? "#0284c7" : "#64748b", letterSpacing: 1 }}>{opt.label}</span>
+                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: cameraAngle === opt.id ? "#00e5ff" : "#334155", transition: "all 0.2s" }} />
+                    <span style={{ fontSize: 13, color: cameraAngle === opt.id ? "#00e5ff" : "#64748b", letterSpacing: 1 }}>{opt.label}</span>
                   </div>
-                  <p style={{ fontSize: 11, color: "#475569", fontFamily: "monospace", lineHeight: 1.5, marginLeft: 18 }}>{opt.desc}</p>
+                  <p style={{ fontSize: 11, color: "#94a3b8", fontFamily: "monospace", lineHeight: 1.5, marginLeft: 18 }}>{opt.desc}</p>
                 </div>
               ))}
             </div>
 
-            <div style={{ background: "#ffffff", borderRadius: 10, padding: "14px", border: "1px solid #0e1628" }}>
+            <div style={{ background: "#111827", borderRadius: 10, padding: "14px", border: "1px solid #1e2a3a" }}>
               <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 2, marginBottom: 10 }}>📱 IPHONE TIPS</div>
               {[
                 "Set Auto-Lock to Never while recording (Settings → Display & Brightness)",
@@ -951,15 +952,15 @@ If no pitch is visible or it's between pitches, set pitch_detected to false.`,
                 "Enable Do Not Disturb to prevent notifications from pausing the session",
               ].map((tip, i) => (
                 <div key={i} style={{ display: "flex", gap: 10, marginBottom: 8, alignItems: "flex-start" }}>
-                  <span style={{ fontSize: 10, color: "#0284c7", fontFamily: "monospace", marginTop: 1, flexShrink: 0 }}>0{i + 1}</span>
-                  <span style={{ fontSize: 11, color: "#334155", fontFamily: "monospace", lineHeight: 1.5 }}>{tip}</span>
+                  <span style={{ fontSize: 10, color: "#00e5ff", fontFamily: "monospace", marginTop: 1, flexShrink: 0 }}>0{i + 1}</span>
+                  <span style={{ fontSize: 11, color: "#94a3b8", fontFamily: "monospace", lineHeight: 1.5 }}>{tip}</span>
                 </div>
               ))}
             </div>
 
-            <div style={{ background: "#ffffff", borderRadius: 10, padding: "14px", border: "1px solid #0e1628" }}>
+            <div style={{ background: "#111827", borderRadius: 10, padding: "14px", border: "1px solid #1e2a3a" }}>
               <div style={{ fontSize: 9, color: "#64748b", fontFamily: "monospace", letterSpacing: 2, marginBottom: 10 }}>MOTION SENSITIVITY</div>
-              <p style={{ fontSize: 11, color: "#334155", fontFamily: "monospace", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 11, color: "#94a3b8", fontFamily: "monospace", lineHeight: 1.6 }}>
                 The app checks for motion every 1.5 seconds using pixel comparison — zero cost. The Claude AI only fires when movement is detected (threshold: 10% pixel change). During idle time between pitches, no API calls are made, saving battery and cost.
               </p>
             </div>
