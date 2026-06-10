@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#060810"/>
+  <circle cx="256" cy="256" r="215" fill="none" stroke="#00e5ff" stroke-width="20"/>
+  <rect x="143" y="113" width="226" height="256" fill="#0a0f1a" stroke="#1e3a5f" stroke-width="12" rx="4"/>
+  <line x1="218" y1="113" x2="218" y2="369" stroke="#1a2a3a" stroke-width="8"/>
+  <line x1="294" y1="113" x2="294" y2="369" stroke="#1a2a3a" stroke-width="8"/>
+  <line x1="143" y1="198" x2="369" y2="198" stroke="#1a2a3a" stroke-width="8"/>
+  <line x1="143" y1="284" x2="369" y2="284" stroke="#1a2a3a" stroke-width="8"/>
+  <circle cx="256" cy="267" r="42" fill="#00e5ffcc" stroke="#00e5ff" stroke-width="8"/>
+  <text x="185" y="454" font-family="monospace" font-size="52" font-weight="bold" fill="#00e5ff">PITCH</text>
+  <text x="330" y="454" font-family="monospace" font-size="52" font-weight="bold" fill="#c8d8f0">LAB</text>
+</svg>
