@@ -3,11 +3,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
 // Zone layout (catcher's view, 3x3 + outside)
-// 1=top-in, 2=top-mid, 3=top-out
-// 4=mid-in, 5=center,  6=mid-out
-// 7=bot-in, 8=bot-mid, 9=bot-out
-// out: "high","low","inside","outside","way-out"
-
 const PITCH_TYPES = ["Fastball", "Changeup", "Dropball", "Curveball", "Riseball", "Other"];
 
 const RESULT_COLORS = {
@@ -26,14 +21,12 @@ const RESULT_LABELS = {
   "in-play": "IP",
 };
 
-// Zone center positions as % of strike zone box (x, y)
 const ZONE_CENTERS = {
   1: [16.5, 16.5], 2: [50, 16.5], 3: [83.5, 16.5],
   4: [16.5, 50],   5: [50, 50],   6: [83.5, 50],
   7: [16.5, 83.5], 8: [50, 83.5], 9: [83.5, 83.5],
 };
 
-// Outside zone positions (relative to full zone area including outside)
 const OUTSIDE_POSITIONS = {
   "high":    { x: 50, y: -12 },
   "low":     { x: 50, y: 112 },
@@ -41,6 +34,23 @@ const OUTSIDE_POSITIONS = {
   "outside": { x: 112, y: 50 },
   "way-out": { x: 50, y: 50 },
 };
+
+// Session history stored in localStorage
+const HISTORY_KEY = "pitchlab_sessions";
+
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+  } catch { return []; }
+}
+
+function saveSession(session) {
+  try {
+    const history = loadHistory();
+    history.unshift(session); // newest first
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 30))); // keep last 30
+  } catch (e) { console.warn("Could not save session:", e); }
+}
 
 function StrikeZone({ pitches }) {
   const zoneSize = 220;
@@ -161,10 +171,14 @@ export default function ZoePitcher() {
   const [selectedType, setSelectedType] = useState("Fastball");
   const [pitcherName, setPitcherName] = useState("Zoe");
   const [totalCost, setTotalCost] = useState(0);
-  const [tab, setTab] = useState("zone"); // "zone" | "log" | "setup"
-  const [cameraAngle, setCameraAngle] = useState("behind"); // "behind" | "side"
+  const [tab, setTab] = useState("zone"); // "zone" | "log" | "history" | "setup"
+  const [cameraAngle, setCameraAngle] = useState("behind");
   const [veloInput, setVeloInput] = useState("");
   const [veloFlash, setVeloFlash] = useState(false);
+  const [history, setHistory] = useState([]);
+
+  // Load history on mount
+  useEffect(() => { setHistory(loadHistory()); }, []);
 
   const addPitch = useCallback((pitch) => {
     setPitches(prev => [...prev, pitch]);
@@ -258,9 +272,35 @@ export default function ZoePitcher() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          imageBase64: frame,
-          cameraAngle,
-          selectedType,
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 1000,
+          system: `You are an expert softball pitching analyst. ${angleNote}
+
+Analyze this frame to determine if a pitch was just delivered. Return ONLY valid JSON, no markdown.
+
+JSON structure:
+{
+  "pitch_detected": true/false,
+  "result": "called-strike" | "swinging-strike" | "ball" | "foul" | "in-play" | null,
+  "zone": 1-9 (inside strike zone) or "high" | "low" | "inside" | "outside" | "way-out" (outside zone) | null,
+  "pitch_type": "Fastball" | "Changeup" | "Dropball" | "Curveball" | "Riseball" | "Other" | null,
+  "mechanic_note": "One short observation about release point, arm speed, stride, or hip rotation — or null",
+  "confidence": "high" | "medium" | "low"
+}
+
+Zone grid (from catcher's view):
+1=top-inside  2=top-middle  3=top-outside
+4=mid-inside  5=center      6=mid-outside
+7=bot-inside  8=bot-middle  9=bot-outside
+
+If no pitch is visible or it's between pitches, set pitch_detected to false.`,
+          messages: [{
+            role: "user",
+            content: [
+              { type: "image", source: { type: "base64", media_type: "image/jpeg", data: frame } },
+              { type: "text", text: "Analyze this softball pitching frame." }
+            ]
+          }]
         })
       });
 
@@ -592,9 +632,9 @@ export default function ZoePitcher() {
 
       {/* Tabs */}
       <div style={{ background: "#080b12", borderBottom: "1px solid #0e1628", display: "flex" }}>
-        {["zone", "log", "setup"].map(t => (
+        {["zone", "log", "history", "setup"].map(t => (
           <button key={t} className={`tab${tab === t ? " active" : ""}`} onClick={() => setTab(t)}>
-            {t === "zone" ? "ZONE MAP" : t === "log" ? "PITCH LOG" : "SETUP"}
+            {t === "zone" ? "ZONE MAP" : t === "log" ? "PITCH LOG" : t === "history" ? `HISTORY${history.length > 0 ? ` (${history.length})` : ""}` : "SETUP"}
           </button>
         ))}
         <div style={{ marginLeft: "auto", padding: "8px 12px", fontSize: 10, color: "#1e3050", fontFamily: "monospace", display: "flex", alignItems: "center", gap: 8 }}>
@@ -754,9 +794,26 @@ export default function ZoePitcher() {
             )}
 
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-              <button onClick={() => { if (pitches.length > 0 && confirm("Clear all pitches?")) { setPitches([]); setLastPitch(null); setTotalCost(0); } }}
-                style={{ flex: 1, padding: "8px", background: "transparent", color: "#1e3050", border: "1px solid #0e1628", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
-                CLEAR
+              <button onClick={() => {
+                if (pitches.length > 0 && confirm("Save session to history and clear?")) {
+                  const session = {
+                    id: Date.now(),
+                    date: new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }),
+                    time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    pitcher: pitcherName,
+                    total: pitches.length,
+                    strikesPct,
+                    zonePct,
+                    maxVelo,
+                    avgVelo,
+                    pitchData: pitches,
+                  };
+                  saveSession(session);
+                  setHistory(loadHistory());
+                  setPitches([]); setLastPitch(null); setTotalCost(0);
+                }
+              }} style={{ flex: 1, padding: "8px", background: "transparent", color: "#1e3050", border: "1px solid #0e1628", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
+                SAVE + CLEAR
               </button>
               <button onClick={loadDemo}
                 style={{ flex: 1, padding: "8px", background: "#0a0d14", color: "#f5c518", border: "1px solid #f5c51822", borderRadius: 6, cursor: "pointer", fontSize: 11, fontFamily: "monospace", letterSpacing: 1 }}>
@@ -773,9 +830,8 @@ export default function ZoePitcher() {
                 color: pitches.length > 0 ? "#00e5ff" : "#1e2a3a",
                 border: `1px solid ${pitches.length > 0 ? "#00e5ff44" : "#0e1628"}`,
                 fontSize: 12, fontFamily: "monospace", letterSpacing: 2,
-                boxShadow: pitches.length > 0 ? "0 0 20px #00e5ff11" : "none",
               }}>
-              {exporting ? "GENERATING..." : "↓ EXPORT REPORT  (PNG)"}
+              {exporting ? "GENERATING..." : "↓ EXPORT REPORT (PNG)"}
             </button>
           </div>
         )}
@@ -806,6 +862,57 @@ export default function ZoePitcher() {
                     <div style={{ fontSize: 9, color: "#1e2a3a", fontFamily: "monospace" }}>{p.time}</div>
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab === "history" && (
+          <div style={{ padding: "16px" }}>
+            {history.length === 0 ? (
+              <div style={{ textAlign: "center", color: "#1e3050", fontFamily: "monospace", fontSize: 11, padding: "40px 0" }}>
+                <div style={{ fontSize: 28, marginBottom: 12 }}>📋</div>
+                NO SESSIONS SAVED YET<br />
+                <span style={{ color: "#1a2a3a", fontSize: 10, marginTop: 8, display: "block" }}>
+                  Sessions are saved when you tap SAVE + CLEAR
+                </span>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {history.map((s, i) => {
+                  const sp = s.strikesPct || 0;
+                  return (
+                    <div key={s.id} style={{ background: "#080b12", borderRadius: 8, padding: "12px 14px", border: "1px solid #0e1628" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                        <div>
+                          <div style={{ fontSize: 14, color: "#c8d8f0", letterSpacing: 1 }}>{s.pitcher}</div>
+                          <div style={{ fontSize: 10, color: "#2a4a6a", fontFamily: "monospace", marginTop: 2 }}>{s.date} · {s.time}</div>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ fontSize: 22, color: sp >= 60 ? "#00ff88" : sp >= 50 ? "#f5c518" : "#ff4455", fontFamily: "monospace" }}>{sp}%</div>
+                          <div style={{ fontSize: 9, color: "#1e3050", fontFamily: "monospace" }}>STRIKES</div>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", gap: 6 }}>
+                        {[
+                          { label: "PITCHES", value: s.total },
+                          { label: "ZONE %", value: `${s.zonePct || 0}%`, color: "#00e5ff" },
+                          { label: "TOP MPH", value: s.maxVelo || "—", color: "#f5c518" },
+                          { label: "AVG MPH", value: s.avgVelo || "—" },
+                        ].map(({ label, value, color }) => (
+                          <div key={label} style={{ flex: 1, background: "#0a0d14", borderRadius: 6, padding: "6px 4px", textAlign: "center" }}>
+                            <div style={{ fontSize: 8, color: "#1e3050", fontFamily: "monospace", letterSpacing: 1 }}>{label}</div>
+                            <div style={{ fontSize: 16, color: color || "#c8d8f0", fontFamily: "monospace" }}>{value}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+                <button onClick={() => { if (confirm("Delete all session history?")) { localStorage.removeItem(HISTORY_KEY); setHistory([]); } }}
+                  style={{ padding: "8px", background: "transparent", color: "#1e2030", border: "1px solid #0e1628", borderRadius: 6, cursor: "pointer", fontSize: 10, fontFamily: "monospace", letterSpacing: 1, marginTop: 4 }}>
+                  CLEAR ALL HISTORY
+                </button>
               </div>
             )}
           </div>
